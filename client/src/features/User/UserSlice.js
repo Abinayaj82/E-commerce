@@ -1,5 +1,5 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../utils/api";
 
 export const registerUser = createAsyncThunk("user/registerUser", async (formData, {rejectWithValue}) => {
     try {
@@ -8,7 +8,7 @@ export const registerUser = createAsyncThunk("user/registerUser", async (formDat
                 "Content-Type": "multipart/form-data"
             },
         };
-        const {data} = await axios.post("/api/v1/user/new", formData, config)
+        const {data} = await api.post("/api/v1/user/new", formData, config)
         return data;
         //console.log(data);
     } catch (error) {
@@ -20,7 +20,7 @@ export const registerUser = createAsyncThunk("user/registerUser", async (formDat
 export const getUserProfile = createAsyncThunk("user/getUserProfile", async (userId, {rejectWithValue}) => {
     try {
          
-        const {data} = await axios.get('/api/v1/user/profile')
+        const {data} = await api.get('/api/v1/user/profile')
         return data;
     } catch (error) {
         return rejectWithValue(error.response?.data || "Failed to fetch user profile");
@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk("user/loginUser", async ({email, passw
                 "Content-Type": "application/json"
             },
         };
-        const {data} = await axios.post("/api/v1/user/login", {email, password}, config)
+        const {data} = await api.post("/api/v1/user/login", {email, password}, config)
         return data;
     } catch (error) {
         return rejectWithValue(error.response?.data || "Something went wrong");
@@ -44,7 +44,7 @@ export const loginUser = createAsyncThunk("user/loginUser", async ({email, passw
 //Logout user
 export const logoutUser = createAsyncThunk("user/logoutUser", async (_, {rejectWithValue}) => {
     try {
-        await axios.get("/api/v1/user/logout")
+        await api.get("/api/v1/user/logout")
         localStorage.removeItem("user");
         localStorage.removeItem("isAuthenticated");
     } catch (error) {
@@ -59,7 +59,7 @@ export const updateUserProfile = createAsyncThunk("user/updateUserProfile", asyn
                 "Content-Type": "multipart/form-data"
             },
         };
-        const {data} = await axios.put("/api/v1/user/update-profile", formData, config)
+        const {data} = await api.put("/api/v1/user/update-profile", formData, config)
         return data;
     } catch (error) {
         return rejectWithValue(error.response?.data || "Something went wrong");
@@ -74,7 +74,7 @@ export const updatePassword = createAsyncThunk("user/updatePassword", async (for
                 "Content-Type": "multipart/form-data"
             },
         };
-        const {data} = await axios.put("/api/v1/user/update-password", formData, config)
+        const {data} = await api.put("/api/v1/user/update-password", formData, config)
         return data;
     } catch (error) {
         return rejectWithValue(error.response?.data || "Something went wrong");
@@ -89,7 +89,7 @@ export const updatePassword = createAsyncThunk("user/updatePassword", async (for
                 "Content-Type" : "application/json"
             },
         }
-        const { data} = await axios.post("/api/v1/user/forgot-password" ,{email}, config)
+        const { data} = await api.post("/api/v1/user/forgot-password" ,{email}, config)
        // console.log(data)
         return data
      } catch (error) {
@@ -105,7 +105,7 @@ export const updatePassword = createAsyncThunk("user/updatePassword", async (for
                 "Content-Type" : "application/json"
             },
     }
-       const { data } = await axios.post(`/api/v1/user/reset-password/${token}`, userData ,config)
+       const { data } = await api.post(`/api/v1/user/reset-password/${token}`, userData ,config)
        console.log(data)
   } catch (error){
         return rejectWithValue(error.response?.data || "Reset password failed");
@@ -119,7 +119,7 @@ export const updatePassword = createAsyncThunk("user/updatePassword", async (for
                 "Content-Type" :"application/json"
             }
         }
-        const {data } = await axios.post("api/v1/user/saveAddress", addressData , config)
+        const {data } = await api.post("api/v1/user/saveAddress", addressData , config)
         return data;
     } catch(error){
         return rejectWithValue(error.response?.data || "Failed to save address");
